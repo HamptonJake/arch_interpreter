@@ -10,12 +10,49 @@ int32_t* reg; // Array of 32 32-bit registers
 void init_regs();
 bool interpret(char* instr);
 void write_read_demo();
+void print_tokens(char* instr, char** theword);
+int get_instr_length(char*);
 
 /**
  * Initialize register array for usage.
  * Malloc space for each 32-bit register then initializes each register to 0.
  * Do not alter this function!
  */
+
+
+int get_instr_length(char* instr){
+	printf("We are in the function");
+	int thelength = 0;
+	while(!(*instr == "\n")){
+		printf("%c\n", *instr);
+		thelength++;
+		instr++;
+	}//end while
+	return thelength;
+
+}// length
+
+
+void print_tokens(char* instr, char** theword){
+
+	int totaldelim = 0;
+        while(!(*instr == '\0')){
+		printf("In the while\n");
+		if(*instr == ','){
+			totaldelim++;
+		}
+		instr++;
+
+        }//end while
+	printf("Reached the end of the while in print tokens\n");
+
+    for(int j = 0; j < totaldelim+1; j++){
+        printf("Tokens[%d] = %s\n", j, theword[j]);
+    }//end for
+
+}//end print tokens
+
+
 void init_regs(){
 	int reg_amount = 32;
 	reg = malloc(reg_amount * sizeof(int32_t)); // 32 * 4 bytes
@@ -31,6 +68,20 @@ void init_regs(){
  * as a parameter to this function.
  */
 bool interpret(char* instr){
+	printf("Delimiter: ,\n");
+	int newlength = get_instr_length(*instr);
+
+	//printf("Start tokenize\n");
+
+
+	//printf("before tokenize");
+	//char** tokeninstr = tokenize(instr, ",");
+
+
+	//printf("After tokenizer");
+	//print_tokens(instr, tokeninstr);
+
+
 	return true;
 }
 
@@ -61,10 +112,10 @@ void write_read_demo(){
 void print_regs(){
 	int col_size = 10;
 	for(int i = 0; i < 8; i++){
-		printf("X%02i:%.*lld", i, col_size, (long long int) r[i]);
-		printf(" X%02i:%.*lld", i+8, col_size, (long long int) r[i+8]);
-		printf(" X%02i:%.*lld", i+16, col_size, (long long int) r[i+16]);
-		printf(" X%02i:%.*lld\n", i+24, col_size, (long long int) r[i+24]);
+		printf("X%02i:%.*lld", i, col_size, (long long int) reg[i]);
+		printf(" X%02i:%.*lld", i+8, col_size, (long long int) reg[i+8]);
+		printf(" X%02i:%.*lld", i+16, col_size, (long long int) reg[i+16]);
+		printf(" X%02i:%.*lld\n", i+24, col_size, (long long int) reg[i+24]);
 	}
 }
 
@@ -89,6 +140,9 @@ int main(){
 	// fgets() returns null if EOF is reached.
 	is_null = fgets(instruction, 1000, stdin) == NULL;
 	while(!is_null){
+		//This should replace the \n and fix the error
+		//instruction[get_instr_length(instruction)] = '\0';
+		printf("Before interpret\n");
 		interpret(instruction);
 		printf("\n");
 		print_regs();
